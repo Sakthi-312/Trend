@@ -1,0 +1,16 @@
+# Node modules
+node_modules/
+npm-debug.log
+package-lock.json
+
+# Docker
+*.log
+*.tmp
+*.pid
+Dockerfile~
+.dockerignore
+.env
+
+# Terraform
+.terraform/
+terraform.tfstate*
