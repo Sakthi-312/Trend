@@ -1,0 +1,169 @@
+Started by GitHub push by Sakthi-312
+Obtained Jenkinsfile from git https://github.com/Sakthi-312/Trend.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/Trend-CI-CD-Pipeline
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: git
+using credential github-token
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/Trend-CI-CD-Pipeline/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Sakthi-312/Trend.git # timeout=10
+Fetching upstream changes from https://github.com/Sakthi-312/Trend.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+using GIT_ASKPASS to set credentials For Accessing GitHub
+ > git fetch --tags --force --progress -- https://github.com/Sakthi-312/Trend.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision ce114cc52e8a8e0136451ffe90529a44c593061e (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ce114cc52e8a8e0136451ffe90529a44c593061e # timeout=10
+Commit message: "Testing Pipeline Push"
+ > git rev-list --no-walk f1b7554ebe2355408179d2a6d457e8038004cc2c # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout Code)
+[Pipeline] git
+The recommended git tool is: git
+using credential github-token
+ > git rev-parse --resolve-git-dir /var/lib/jenkins/workspace/Trend-CI-CD-Pipeline/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Sakthi-312/Trend.git # timeout=10
+Fetching upstream changes from https://github.com/Sakthi-312/Trend.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.34.1'
+using GIT_ASKPASS to set credentials For Accessing GitHub
+ > git fetch --tags --force --progress -- https://github.com/Sakthi-312/Trend.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision ce114cc52e8a8e0136451ffe90529a44c593061e (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ce114cc52e8a8e0136451ffe90529a44c593061e # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D main # timeout=10
+ > git checkout -b main ce114cc52e8a8e0136451ffe90529a44c593061e # timeout=10
+Commit message: "Testing Pipeline Push"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker Image)
+[Pipeline] sh
++ echo 🚧 Building Docker image...
+🚧 Building Docker image...
++ docker build -t sakthi312/trend-app:latest .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 137B 0.1s done
+#1 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/nginx:latest
+#2 ...
+
+#3 [auth] library/nginx:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/nginx:latest
+#2 DONE 2.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B 0.1s done
+#4 DONE 0.1s
+
+#5 [1/2] FROM docker.io/library/nginx:latest@sha256:1beed3ca46acebe9d3fb62e9067f03d05d5bfa97a00f30938a0a3580563272ad
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 3.87kB 0.0s done
+#6 DONE 0.0s
+
+#7 [2/2] COPY ./dist /usr/share/nginx/html
+#7 CACHED
+
+#8 exporting to image
+#8 exporting layers done
+#8 writing image sha256:10a2f81d32601b68fc0f56ec4160d4d8c00dd2dee128d0ba353eb4b0483d79ec 0.0s done
+#8 naming to docker.io/sakthi312/trend-app:latest 0.0s done
+#8 DONE 0.0s
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push Docker Image)
+[Pipeline] withCredentials
+Masking supported pattern matches of $PASSWORD
+[Pipeline] {
+[Pipeline] sh
++ echo 🔐 Logging in to DockerHub...
+🔐 Logging in to DockerHub...
++ echo ****
++ docker login -u sakthi312 --password-stdin
+Login Succeeded
++ docker push sakthi312/trend-app:latest
+The push refers to repository [docker.io/sakthi312/trend-app]
+639daeaa1d87: Preparing
+d7217c60dca4: Preparing
+d81df94f8d07: Preparing
+99cd1b1b6a43: Preparing
+2ced4cd78a7b: Preparing
+8feb164cd673: Preparing
+6e19587ac541: Preparing
+36d06fe0cbc6: Preparing
+8feb164cd673: Waiting
+6e19587ac541: Waiting
+36d06fe0cbc6: Waiting
+2ced4cd78a7b: Layer already exists
+99cd1b1b6a43: Layer already exists
+d7217c60dca4: Layer already exists
+639daeaa1d87: Layer already exists
+d81df94f8d07: Layer already exists
+8feb164cd673: Layer already exists
+6e19587ac541: Layer already exists
+36d06fe0cbc6: Layer already exists
+latest: digest: sha256:723a5086fd962af38ed2517615ec1d4691bc9d57ec2676c80b30269da7322919 size: 1989
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to EKS)
+[Pipeline] sh
++ echo 🚀 Deploying to EKS...
+🚀 Deploying to EKS...
++ aws eks update-kubeconfig --region ap-south-1 --name trend-cluster
+Updated context arn:aws:eks:ap-south-1:947808343597:cluster/trend-cluster in /var/lib/jenkins/.kube/config
++ kubectl apply -f deployment.yaml
+deployment.apps/trend-deployment unchanged
++ kubectl apply -f service.yaml
+Pausing
+service/trend-service unchanged
++ kubectl get svc
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP                                                                PORT(S)        AGE
+kubernetes      ClusterIP      10.100.0.1      <none>                                                                     443/TCP        91m
+trend-service   LoadBalancer   10.100.173.34   aafe751100894407cb91a43e20536e19-1894365853.ap-south-1.elb.amazonaws.com   80:31353/TCP   50m
+Resuming
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+✅ Deployment completed successfully!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
+
+Loadbalancer ARN Link: http://aafe751100894407cb91a43e20536e19-1894365853.ap-south-1.elb.amazonaws.com
